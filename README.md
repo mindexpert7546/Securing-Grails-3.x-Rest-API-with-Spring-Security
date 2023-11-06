@@ -129,3 +129,46 @@ Here, for authorization key use "Bearer access_token". You can see data as shown
 
    https://www.djamware.com/post/58a53b5180aca748640ce350/securing-rest-api-with-grails-3-and-spring-security-rest
 
+
+
+![Screenshot 2023-11-06 161720](https://github.com/mindexpert7546/Securing-Grails-3.x-Rest-API-with-Spring-Security/assets/89348788/660a54cd-0652-4575-a019-e1db8c94b1ba)
+
+![Screenshot 2023-11-06 161805](https://github.com/mindexpert7546/Securing-Grails-3.x-Rest-API-with-Spring-Security/assets/89348788/4fe2848e-42d9-43af-b032-04aacc0a2085)
+
+
+### For more configuration : 
+
+      // Added by the Spring Security Core plugin:
+      grails.plugin.springsecurity.userLookup.userDomainClassName = 'com.mysecurerest.User'
+      grails.plugin.springsecurity.userLookup.authorityJoinClassName = 'com.mysecurerest.UserAuthority'
+      grails.plugin.springsecurity.authority.className = 'com.mysecurerest.Authority'
+      grails.plugin.springsecurity.securityConfigType = "InterceptUrlMap"
+      grails.plugin.springsecurity.interceptUrlMap = [
+          [pattern: '/',               access: ['permitAll']],
+          [pattern: '/error',          access: ['permitAll']],
+          [pattern: '/index',          access: ['permitAll']],
+          [pattern: '/index.gsp',      access: ['permitAll']],
+          [pattern: '/shutdown',       access: ['permitAll']],
+          [pattern: '/assets/**',      access: ['permitAll']],
+          [pattern: '/**/js/**',       access: ['permitAll']],
+          [pattern: '/**/css/**',      access: ['permitAll']],
+          [pattern: '/**/images/**',   access: ['permitAll']],
+          [pattern: '/**/favicon.ico', access: ['permitAll']],
+          [pattern: '/api/login',          access: ['permitAll']],
+          [pattern: '/api/logout',        access: ['isFullyAuthenticated()']],
+          [pattern: '/api/product',    access: ['isFullyAuthenticated()']],
+          [pattern: '/**',             access: ['isFullyAuthenticated()']]
+      ]
+      
+      grails.plugin.springsecurity.filterChain.chainMap = [
+          [pattern: '/api/**', filters:'JOINED_FILTERS,-anonymousAuthenticationFilter,-exceptionTranslationFilter,-authenticationProcessingFilter,-securityContextPersistenceFilter'],
+        [pattern: '/**', filters:'JOINED_FILTERS,-restTokenValidationFilter,-restExceptionTranslationFilter']
+      ]
+      
+      grails.plugin.springsecurity.rest.logout.endpointUrl = '/api/logout'
+      grails.plugin.springsecurity.rest.token.validation.useBearerToken = false
+      grails.plugin.springsecurity.rest.token.validation.headerName = 'X-Auth-Token'
+      grails.plugin.springsecurity.rest.token.storage.memcached.hosts = 'localhost:11211'
+      grails.plugin.springsecurity.rest.token.storage.memcached.username = ''
+      grails.plugin.springsecurity.rest.token.storage.memcached.password = ''
+      grails.plugin.springsecurity.rest.token.storage.memcached.expiration = 86400
